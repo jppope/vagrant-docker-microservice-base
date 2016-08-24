@@ -1,0 +1,37 @@
+# TODO in production we
+# will configure these
+# with ssl and subdomains
+
+# app frontend
+server {
+    listen 4000;
+    server_name localhost;
+
+    # TODO we will want this directory to
+    # be the directory of the master git repo
+    root /var/www/frontend;
+    index index.html;
+
+    # Important for VirtualBox
+    sendfile off;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+
+# app api nodejs reverse proxy
+# this could easily be configured to be load balanced
+server {
+    listen 4001;
+    server_name localhost;
+
+    location / {
+        proxy_pass http://10.10.0.2:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
