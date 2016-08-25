@@ -2,7 +2,8 @@ FROM node:4
 
 # Setup Environment Vars
 # TODO from config file / service discovery DNS?
-ENV USER_SERVICE_ENDPOINT http://10.10.0.4:8080
+ENV MONGO_DB_CONN mongodb://10.10.0.3:27017/master
+ENV JWT_AUTH_SECRET areallystrongsecretforauthenticationrequests
 
 # ----------------------------------------------
 

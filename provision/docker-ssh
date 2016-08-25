@@ -1,0 +1,4 @@
+#!/bin/bash
+
+args=("$@")
+docker exec -i -t ${args[0]} /bin/bash

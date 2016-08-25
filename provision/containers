@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# TODO pass build args to docker containers via ENV Variables or something
+# TODO set this up so we can provision individual pieces of the docker environment
+
+# Setup App Backend
+echo "Setting Up Docker Network 10.10.0.0"
+echo "-----------------------------------"
+
+# setup private network
+docker network create --subnet=10.10.0.0/16 dockernet
+
+# Setup API Gateway
+echo "Building api-gateway container..."
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    docker build -t michaelharrisonroth/api-gateway /var/www/backend/api-gateway
+    docker run --net dockernet --ip 10.10.0.2 --name api-gateway -v /var/www/backend/api-gateway/src:/usr/src/app -d michaelharrisonroth/api-gateway
+
+else
+    docker build -t michaelharrisonroth/api-gateway $(PWD)/../backend/api-gateway
+    docker run --net dockernet --ip 10.10.0.2 --name api-gateway -v $(PWD)/../backend/api-gateway/src:/usr/src/app -d michaelharrisonroth/api-gateway
+fi
+
+# Setup Mongo DB
+# TODO save db data to host
+echo "Running mongodb container..."
+docker run --net dockernet --ip 10.10.0.3 --name mongodb-master -d mongo
+
+# Setup Model Service
+# TODO change this to auth service
+echo "Building user-service..."
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    docker build -t michaelharrisonroth/user-service /var/www/backend/user-service
+    docker run --net dockernet --ip 10.10.0.4 --name user-service -v /var/www/backend/user-service/src:/usr/src/app -d michaelharrisonroth/user-service
+else
+    docker build -t michaelharrisonroth/user-service $(PWD)/../backend/user-service
+    docker run --net dockernet --ip 10.10.0.4 --name user-service -v $(PWD)/../backend/user-service/src:/usr/src/app -d michaelharrisonroth/user-service 
+fi
+
+# Setup Container X...
+# docker build -t ...
+# docker run --net dockernet --ip 10.10.0.4 -it ...

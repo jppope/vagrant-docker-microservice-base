@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# fix hosts ubuntu/xenial
+echo 127.0.0.1 `hostname` | sudo tee -a /etc/hosts > /dev/null
+
+echo "Provisioning VM"
+echo "---------------"
+
+echo "Updating apt-get..."
+apt-get update > /dev/null
+
+# Nginx
+echo "Installing Nginx..."
+apt-get install -y nginx > /dev/null
+
+# Nginx Config
+echo "Configuring Nginx..."
+cp /var/www/provision/config/nginx_vhost /etc/nginx/sites-available/nginx_vhost
+ln -s /etc/nginx/sites-available/nginx_vhost /etc/nginx/sites-enabled/
+rm -rf /etc/nginx/sites-available/default
+
+# Restarting Nginx for config to take effect
+echo "Restarting Nginx..."
+service nginx restart > /dev/null
+
+# Install Docker
+echo "Installing Docker..."
+apt-get install -y linux-image-extra-$(uname -r) linux-image-extra-virtual > /dev/null
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D > /dev/null
+echo "deb https://apt.dockerproject.org/repo ubuntu-xenial main" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt-get update > /dev/null
+apt-get install -y docker-engine > /dev/null
+
+# Start Docker on Linux
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    echo "Starting Docker"
+    service docker restart > /dev/null
+fi
