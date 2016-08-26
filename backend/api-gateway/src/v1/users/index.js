@@ -30,12 +30,7 @@ module.exports = function(router, auth) {
                 return res.status(500).json(err);
             }
 
-            // failed
-            if(response.statusCode == 403) {
-                return res.status(403).json(body);
-            }
-
-            res.json(body);
+            res.status(response.statusCode).json(body);
         });
 
     });
@@ -58,12 +53,7 @@ module.exports = function(router, auth) {
                 return res.status(500).json(err);
             }
 
-            // failed
-            if(response.statusCode == 403) {
-                return res.status(403).json(body);
-            }
-
-            res.json(body);
+            res.status(response.statusCode).json(body);
         });
 
     });
@@ -86,12 +76,7 @@ module.exports = function(router, auth) {
                 return res.status(500).json(err);
             }
 
-            // failed
-            if(response.statusCode == 403) {
-                return res.status(403).json(body);
-            }
-
-            res.json(body);
+            res.status(response.statusCode).json(body);
         });
 
     });
@@ -114,12 +99,7 @@ module.exports = function(router, auth) {
                 return res.status(500).json(err);
             }
 
-            // failed
-            if(response.statusCode == 403) {
-                return res.status(403).json(body);
-            }
-            
-            res.json(body);
+            res.status(response.statusCode).json(body);
         });
 
     });
@@ -142,7 +122,7 @@ module.exports = function(router, auth) {
                 return res.status(500).json(err);
             }
 
-            res.json(body);
+            res.status(response.statusCode).json(body);
         });
 
     });

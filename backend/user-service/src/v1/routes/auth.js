@@ -21,7 +21,8 @@ module.exports = function(router, User) {
           name: 'Admin User',
           username: 'admin',
           email: 'admin@test.com',
-          password: 'password'
+          password: 'password',
+          group: 'admin'
         });
         admin.save();
       }
@@ -95,6 +96,28 @@ module.exports = function(router, User) {
             }
         });
 
+    });
+
+    //
+    // register auser
+    //
+    //   - expects body to contain params
+    //     return user with a token
+    //
+    router.post('/register', function(req, res) {
+
+        // force user group
+        req.body.group = 'user';
+        var user = new User(req.body);
+        user.save(function(err, user) {
+            if(err) {
+                return res.status(500).json(err);
+            }
+
+            // create token for registered user
+            var token = jwt.sign(user, process.env.JWT_AUTH_SECRET);
+            res.json({user: user, token : token});
+        });
     });
 
 };

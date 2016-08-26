@@ -58,7 +58,6 @@ module.exports = function(router, Model) {
             }
 
             model.save();
-
             res.json(model);
         });
 

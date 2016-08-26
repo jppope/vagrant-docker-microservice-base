@@ -96,38 +96,15 @@ module.exports = function(router) {
             
         // create a user
         request({
-            uri: process.env.USER_SERVICE_ENDPOINT+'/v1/user',
+            uri: process.env.USER_SERVICE_ENDPOINT+'/v1/register',
             method: 'POST',
             json: user,
-        }, function(err, response, body){
+        }, function(err, response, body) {
             if(err) {
                 return res.status(500).json(err);
             }
 
-            // set a token for this
-            // new registed user
-            // TODO make this a method
-            request({
-                uri : process.env.USER_SERVICE_ENDPOINT+'/v1/token', 
-                method : 'POST',
-                json : { 
-                    username : user.username,
-                    password : user.password
-                }
-            }, function(err, response, token){
-                if(err) {
-                    return res.status(500).json(err);
-                }
-
-                // failed
-                if(response.statusCode == 403) {
-                    return res.status(403).json(body);
-                }
-
-                user.token = token;
-                res.json(user);
-            });
-
+            res.json(body);
         });
 
     });
