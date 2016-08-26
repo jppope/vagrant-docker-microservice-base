@@ -11,14 +11,14 @@ echo "-----------------------------------"
 docker network create --subnet=10.10.0.0/16 dockernet
 
 # Setup API Gateway
-echo "Building api-gateway container..."
+echo "Building api-gateway-service container..."
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    docker build -t michaelharrisonroth/api-gateway /var/www/backend/api-gateway
-    docker run --net dockernet --ip 10.10.0.2 --name api-gateway -v /var/www/backend/api-gateway/src:/usr/src/app -d michaelharrisonroth/api-gateway
+    docker build -t michaelharrisonroth/api-gateway-service /var/www/backend/api-gateway-service
+    docker run --net dockernet --ip 10.10.0.2 --name api-gateway-service -v /var/www/backend/api-gateway-service/src:/usr/src/app -d michaelharrisonroth/api-gateway-service
 
 else
-    docker build -t michaelharrisonroth/api-gateway $(PWD)/../backend/api-gateway
-    docker run --net dockernet --ip 10.10.0.2 --name api-gateway -v $(PWD)/../backend/api-gateway/src:/usr/src/app -d michaelharrisonroth/api-gateway
+    docker build -t michaelharrisonroth/api-gateway-service $(PWD)/../backend/api-gateway-service
+    docker run --net dockernet --ip 10.10.0.2 --name api-gateway-service -v $(PWD)/../backend/api-gateway-service/src:/usr/src/app -d michaelharrisonroth/api-gateway-service
 fi
 
 # Setup Mongo DB
@@ -26,7 +26,7 @@ fi
 echo "Running mongodb container..."
 docker run --net dockernet --ip 10.10.0.3 --name mongodb-master -d mongo
 
-# Setup Model Service
+# Setup User Service
 # TODO change this to auth service
 echo "Building user-service..."
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
@@ -37,6 +37,27 @@ else
     docker run --net dockernet --ip 10.10.0.4 --name user-service -v $(PWD)/../backend/user-service/src:/usr/src/app -d michaelharrisonroth/user-service 
 fi
 
-# Setup Container X...
-# docker build -t ...
-# docker run --net dockernet --ip 10.10.0.4 -it ...
+Setup Generic Mongo REST Service
+echo "Building mongo-rest-service..."
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    docker build -t michaelharrisonroth/mongo-rest-service /var/www/backend/mongo-rest-service
+    docker run --net dockernet --ip 10.10.0.5 --name mongo-rest-service -v /var/www/backend/mongo-rest-service/src:/usr/src/app -d michaelharrisonroth/mongo-rest-service
+else
+    docker build -t michaelharrisonroth/mongo-rest-service $(PWD)/../backend/mongo-rest-service
+    docker run --net dockernet --ip 10.10.0.5 --name mongo-rest-service -v $(PWD)/../backend/mongo-rest-service/src:/usr/src/app -d michaelharrisonroth/mongo-rest-service 
+fi
+
+# Setup Mysql DB
+echo "Running mysql container..."
+docker run --net dockernet --ip 10.10.0.6 --name mysql-master -e MYSQL_ROOT_PASSWORD=root -d mysql
+
+# Setup Generic Mysql Rest Service
+# TODO change this to auth service
+echo "Building mysql-rest-service..."
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    docker build -t michaelharrisonroth/mysql-rest-service /var/www/backend/mysql-rest-service
+    docker run --net dockernet --ip 10.10.0.7 --name mysql-rest-service -v /var/www/backend/mysql-rest-service/src:/var/www/html -d michaelharrisonroth/mysql-rest-service
+else
+    docker build -t michaelharrisonroth/mysql-rest-service $(PWD)/../backend/mysql-rest-service
+    docker run --net dockernet --ip 10.10.0.7 --name mysql-rest-service -v $(PWD)/../backend/mysql-rest-service/src:/var/www/html -d michaelharrisonroth/mysql-rest-service 
+fi

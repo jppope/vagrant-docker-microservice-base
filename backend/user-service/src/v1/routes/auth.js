@@ -99,7 +99,7 @@ module.exports = function(router, User) {
     });
 
     //
-    // register auser
+    // register a user
     //
     //   - expects body to contain params
     //     return user with a token

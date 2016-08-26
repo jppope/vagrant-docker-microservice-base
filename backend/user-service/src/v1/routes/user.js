@@ -13,7 +13,7 @@ module.exports = function(router, User) {
 
         // validate permissions
         if(authorized.indexOf('admin') == -1) {
-             return res.status(403).end();
+            return res.status(403).end();
         }
 
         User.find({}, function(err, users){
@@ -34,7 +34,7 @@ module.exports = function(router, User) {
 
         // validate owener permissions
         if(authorized.indexOf('admin') == -1 && authorized.indexOf(req.params.id) == -1) {
-             return res.status(403).end();
+            return res.status(403).end();
         }
 
         User.findOne({ _id : req.params.id }, function(err, user){
@@ -77,7 +77,7 @@ module.exports = function(router, User) {
 
         // validate owner permissions
         if(authorized.indexOf('admin') == -1 && authorized.indexOf(req.params.id) == -1) {
-             return res.status(403).end();
+            return res.status(403).end();
         }
 
         User.findOne({ _id : req.params.id }, function (err, user){
@@ -104,7 +104,7 @@ module.exports = function(router, User) {
 
         // validate admin permissions
         if(authorized.indexOf('admin') == -1) {
-             return res.status(403).end();
+            return res.status(403).end();
         }
         
         User.findOne({ _id : req.params.id }, function (err, user){

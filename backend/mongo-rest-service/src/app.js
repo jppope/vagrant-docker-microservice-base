@@ -1,7 +1,7 @@
 'use strict';
 
 const PORT = 8080;
-const SERVICE_NAME = 'ModelService';
+const SERVICE_NAME = 'MongoRESTService';
 const VERSION = 'v1';
 
 // ----------------------------- //

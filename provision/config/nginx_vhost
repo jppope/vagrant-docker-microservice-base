@@ -4,8 +4,8 @@
 
 # app frontend
 server {
-    listen 4000;
-    server_name localhost;
+    listen 80;
+    server_name microservice.app;
 
     # TODO we will want this directory to
     # be the directory of the master git repo
@@ -23,8 +23,8 @@ server {
 # app api nodejs reverse proxy
 # this could easily be configured to be load balanced
 server {
-    listen 4001;
-    server_name localhost;
+    listen 80;
+    server_name api.microservice.app;
 
     location / {
         proxy_pass http://10.10.0.2:8080;
