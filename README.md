@@ -13,7 +13,7 @@ By adding a submodule to the /backend folder and updating the /provision/contain
 1. clone / install repo `https://github.com/michaelharrisonroth/vagrant-docker-microservice-base.git`
 2. install vagrant on your machine.
 3. run `vagrant up` (if you are on a VPS or wish to skip the vagrant setup, you can just run the bash scripts `/provision/setup` then `/provision/containers`).
-4. add 127.0.0.1 microservice.app and 127.0.0.1 api.microservice.app to your /etc/hosts
+4. add `127.0.0.1 microservice.app` and `127.0.0.1 api.microservice.app` to your /etc/hosts
 
 ## Notes
 
